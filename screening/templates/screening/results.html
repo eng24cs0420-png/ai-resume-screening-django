@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Screening Results</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f7fb;
+
+            color: #172033;
+
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            background: #111827;
+
+            color: white;
+
+            padding: 18px 7%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+        }
+
+
+        .logo {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+        }
+
+
+        .nav-button {
+
+            color: white;
+
+            background: #2563eb;
+
+            text-decoration: none;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1100px;
+
+            margin: 35px auto;
+
+        }
+
+
+        .page-title {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .page-title h1 {
+
+            font-size: 32px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .page-title p {
+
+            color: #64748b;
+
+        }
+
+
+        /* =========================
+           CANDIDATE CARD
+        ========================= */
+
+        .candidate-card {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 28px;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        .candidate-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+
+        }
+
+
+        .candidate-name {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+        }
+
+
+        .rank {
+
+            background: #111827;
+
+            color: white;
+
+            padding: 9px 16px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           CANDIDATE INFO
+        ========================= */
+
+        .candidate-info {
+
+            background: #f8fafc;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            line-height: 1.9;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .candidate-info strong {
+
+            color: #111827;
+
+        }
+
+
+        /* =========================
+           OVERALL SCORE
+        ========================= */
+
+        .score-box {
+
+            text-align: center;
+
+            background: #eff6ff;
+
+            border-radius: 14px;
+
+            padding: 28px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .score {
+
+            font-size: 52px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+
+        }
+
+
+        .score-label {
+
+            color: #64748b;
+
+            font-size: 17px;
+
+            margin-top: 5px;
+
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            text-align: center;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #f1f5f9;
+
+            margin-bottom: 25px;
+
+            font-size: 17px;
+
+        }
+
+
+        .status strong {
+
+            margin-right: 8px;
+
+        }
+
+
+        /* =========================
+           METRICS
+        ========================= */
+
+        .metrics {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .metric {
+
+            background: #f8fafc;
+
+            padding: 22px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+        }
+
+
+        .metric-title {
+
+            color: #64748b;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+
+        }
+
+
+        .metric-value {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           PROGRESS BAR
+        ========================= */
+
+        .progress-container {
+
+            margin-top: 14px;
+
+        }
+
+
+        .progress-bar {
+
+            width: 100%;
+
+            height: 10px;
+
+            background: #e2e8f0;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+        }
+
+
+        .progress-fill {
+
+            height: 100%;
+
+            background: #2563eb;
+
+            border-radius: 20px;
+
+        }
+
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section {
+
+            margin-top: 28px;
+
+        }
+
+
+        .section-title {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        /* =========================
+           SCORE BREAKDOWN
+        ========================= */
+
+        .breakdown {
+
+            background: #f8fafc;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+        }
+
+
+        .breakdown-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+        }
+
+
+        .breakdown-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .breakdown-total {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+        }
+
+
+        .formula {
+
+            margin-top: 18px;
+
+            background: #eff6ff;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            color: #1e40af;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =========================
+           SKILLS
+        ========================= */
+
+        .skills {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 9px;
+
+        }
+
+
+        .skill {
+
+            padding: 8px 13px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+        }
+
+
+        .matched {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+        }
+
+
+        .missing {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+        }
+
+
+        .no-skills {
+
+            color: #64748b;
+
+            padding: 10px 0;
+
+        }
+
+
+        /* =========================
+           SKILL STATISTICS
+        ========================= */
+
+        .skill-stats {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 15px;
+
+            margin-top: 15px;
+
+        }
+
+
+        .skill-stat {
+
+            background: #f8fafc;
+
+            padding: 16px;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+        }
+
+
+        .skill-stat-number {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+        }
+
+
+        .skill-stat-label {
+
+            color: #64748b;
+
+            margin-top: 5px;
+
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary {
+
+            background: #f8fafc;
+
+            border-left:
+                5px solid #2563eb;
+
+            padding: 18px;
+
+            line-height: 1.7;
+
+            border-radius: 8px;
+
+        }
+
+
+        /* =========================
+           FILE NAME
+        ========================= */
+
+        .filename {
+
+            margin-top: 20px;
+
+            color: #64748b;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .button-container {
+
+            text-align: center;
+
+            margin: 35px 0;
+
+        }
+
+
+        .button {
+
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 13px 24px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+        }
+
+
+        .button:hover {
+
+            background: #1d4ed8;
+
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            text-align: center;
+
+            color: #64748b;
+
+            padding: 30px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .metrics {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .skill-stats {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .score {
+
+                font-size: 42px;
+
+            }
+
+
+            .container {
+
+                width: 94%;
+
+            }
+
+
+            .navbar {
+
+                padding:
+                    15px 4%;
+
+            }
+
+
+            .breakdown-row {
+
+                flex-direction:
+                    column;
+
+                gap: 5px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        AI Resume Screening
+
+    </div>
+
+
+    <a href="/"
+       class="nav-button">
+
+        Analyze Again
+
+    </a>
+
+</nav>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- PAGE TITLE -->
+
+    <div class="page-title">
+
+        <h1>
+            Screening Results
+        </h1>
+
+
+        <p>
+            AI-based resume analysis using
+            machine learning and skill matching
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         LOOP THROUGH RESULTS
+    ========================= -->
+
+    {% for result in results %}
+
+
+    <div class="candidate-card">
+
+
+        <!-- CANDIDATE HEADER -->
+
+        <div class="candidate-header">
+
+
+            <div class="candidate-name">
+
+                {{ result.name }}
+
+            </div>
+
+
+            <div class="rank">
+
+                Rank #{{ result.rank }}
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             CANDIDATE INFORMATION
+        ========================= -->
+
+        <div class="candidate-info">
+
+
+            <div>
+
+                <strong>
+                    Name:
+                </strong>
+
+                {{ result.name }}
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Email:
+                </strong>
+
+                {{ result.email }}
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Phone:
+                </strong>
+
+                {{ result.phone }}
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             OVERALL SCORE
+        ========================= -->
+
+        <div class="score-box">
+
+
+            <div class="score">
+
+                {{ result.final_score }}%
+
+            </div>
+
+
+            <div class="score-label">
+
+                Overall Match Score
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             STATUS
+        ========================= -->
+
+        <div class="status">
+
+            <strong>
+                Screening Status:
+            </strong>
+
+            {{ result.status }}
+
+        </div>
+
+
+
+        <!-- =========================
+             METRICS
+        ========================= -->
+
+        <div class="metrics">
+
+
+            <!-- ML SIMILARITY -->
+
+            <div class="metric">
+
+
+                <div class="metric-title">
+
+                    ML Similarity
+
+                </div>
+
+
+                <div class="metric-value">
+
+                    {{ result.similarity_score|default:"0" }}%
+
+                </div>
+
+
+                <div class="progress-container">
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="width: {{ result.similarity_score|default:0 }}%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- SKILL SCORE -->
+
+            <div class="metric">
+
+
+                <div class="metric-title">
+
+                    Skill Score
+
+                </div>
+
+
+                <div class="metric-value">
+
+                    {{ result.skill_score|default:"0" }}%
+
+                </div>
+
+
+                <div class="progress-container">
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="width: {{ result.skill_score|default:0 }}%;">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             SCORE BREAKDOWN
+        ========================= -->
+
+        <div class="section">
+
+
+            <div class="section-title">
+
+                📊 Score Breakdown
+
+            </div>
+
+
+            <div class="breakdown">
+
+
+                <div class="breakdown-row">
+
+
+                    <span>
+
+                        ML Similarity
+
+                        × 60%
+
+                    </span>
+
+
+                    <strong>
+
+                        {{ result.similarity_score }} × 0.60
+
+                        =
+
+                        {{ result.similarity_contribution }}%
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="breakdown-row">
+
+
+                    <span>
+
+                        Skill Score
+
+                        × 40%
+
+                    </span>
+
+
+                    <strong>
+
+                        {{ result.skill_score }} × 0.40
+
+                        =
+
+                        {{ result.skill_contribution }}%
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="breakdown-row breakdown-total">
+
+
+                    <span>
+
+                        Final Match Score
+
+                    </span>
+
+
+                    <strong>
+
+                        {{ result.final_score }}%
+
+                    </strong>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="formula">
+
+
+                <strong>
+                    Formula:
+                </strong>
+
+
+                <br>
+
+
+                Final Score =
+
+                (ML Similarity × 60%)
+
+                +
+
+                (Skill Score × 40%)
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             SKILL STATISTICS
+        ========================= -->
+
+        <div class="section">
+
+
+            <div class="section-title">
+
+                📌 Skill Analysis
+
+            </div>
+
+
+            <div class="skill-stats">
+
+
+                <div class="skill-stat">
+
+
+                    <div class="skill-stat-number">
+
+                        {{ result.matched_count }}
+
+                    </div>
+
+
+                    <div class="skill-stat-label">
+
+                        Matched Skills
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="skill-stat">
+
+
+                    <div class="skill-stat-number">
+
+                        {{ result.required_count }}
+
+                    </div>
+
+
+                    <div class="skill-stat-label">
+
+                        Required Skills
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             MATCHED SKILLS
+        ========================= -->
+
+        <div class="section">
+
+
+            <div class="section-title">
+
+                ✅ Matched Skills
+
+            </div>
+
+
+            {% if result.matching_skills %}
+
+
+                <div class="skills">
+
+
+                    {% for skill in result.matching_skills %}
+
+
+                        <span class="skill matched">
+
+                            {{ skill }}
+
+                        </span>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <p class="no-skills">
+
+                    No matching skills found.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- =========================
+             MISSING SKILLS
+        ========================= -->
+
+        <div class="section">
+
+
+            <div class="section-title">
+
+                ❌ Missing Skills
+
+            </div>
+
+
+            {% if result.missing_skills %}
+
+
+                <div class="skills">
+
+
+                    {% for skill in result.missing_skills %}
+
+
+                        <span class="skill missing">
+
+                            {{ skill }}
+
+                        </span>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <p class="no-skills">
+
+                    No missing skills.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- =========================
+             SUMMARY
+        ========================= -->
+
+        <div class="section">
+
+
+            <div class="section-title">
+
+                📝 Screening Summary
+
+            </div>
+
+
+            <div class="summary">
+
+                {{ result.summary }}
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             FILE
+        ========================= -->
+
+        <div class="filename">
+
+
+            Resume File:
+
+            <strong>
+
+                {{ result.filename }}
+
+            </strong>
+
+
+        </div>
+
+
+    </div>
+
+
+    {% empty %}
+
+
+    <div class="candidate-card">
+
+
+        <h2>
+            No Results Available
+        </h2>
+
+
+        <p>
+            Please upload a resume and job description
+            to perform screening.
+        </p>
+
+
+    </div>
+
+
+    {% endfor %}
+
+
+
+    <!-- =========================
+         BUTTON
+    ========================= -->
+
+    <div class="button-container">
+
+
+        <a href="/"
+           class="button">
+
+            ← Analyze More Resumes
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    AI-Based Resume Screening System
+
+    <br>
+
+    Django + Machine Learning
+
+</footer>
+
+
+</body>
+
+</html>
